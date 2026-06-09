@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,14 +25,28 @@ export class FoodsService {
 
   async findOne(id: number) {
     const food = await this.foodRepository.findOneBy({ id });
+    if(!food) {
+      throw new NotFoundException(`Comida con el id ${id} no encontrado.`)
+    }
     return food;
   }
 
-  update(id: number, updateFoodDto: UpdateFoodDto) {
-    return `This action updates a #${id} food`;
+  async update(id: number, updateFoodDto: UpdateFoodDto) {
+    const food = await this.foodRepository.findOneBy({id});
+    if(!food) {
+      throw new NotFoundException(`Comida no encontrada.`)
+    }
+    const updateFood = this.foodRepository.merge(food, updateFoodDto);
+
+    return this.foodRepository.save(updateFood);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} food`;
+  async remove(id: number) {
+    const food = await this.foodRepository.findOneBy({ id });
+    if(!food) {
+      throw new NotFoundException(`Comida con el id ${id} no encontrado.`)
+    }
+    await this.foodRepository.delete(id);
+    return {message: `Comida con el id ${id} eliminada.`}
   }
 }
