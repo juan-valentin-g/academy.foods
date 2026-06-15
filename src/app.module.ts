@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthController } from './auth/auth/auth.controller';
 import { AuthModule } from './auth/auth/auth.module';
+import { AuthService } from './auth/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -21,8 +24,9 @@ import { AuthModule } from './auth/auth/auth.module';
     }),
     FoodsModule,
     UsersModule,
-    AuthModule],
-  controllers: [AppController, AuthController],
+    AuthModule,
+    CategoriesModule],
+  controllers: [AppController,],
   providers: [AppService],
 })
 export class AppModule {}
