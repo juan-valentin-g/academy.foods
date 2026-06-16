@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,23 +14,34 @@ export class CategoriesService {
   ){}
 
   async create(createCategoryDto: CreateCategoryDto) {
-    //const category = this.categoryRepository.create(createCategoryDto);
+    const category = this.categoryRepository.create(createCategoryDto);
+    return await this.categoryRepository.save(category);
 
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    const categories = await this.categoryRepository.find();
+    return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
+  async findOne(id: number) {
+      const category = await this.categoryRepository.findOneBy({ id });
+      if(!category) {
+        throw new NotFoundException(`Categoría con el id ${id} no encontrada.`)
+      }
+      return category;
+    }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+      const category = await this.findOne(id);
+      const updateCategory = this.categoryRepository.merge(category, updateCategoryDto);
+  
+      return this.categoryRepository.save(updateCategory);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const category = await this.findOne(id);
+    await this.categoryRepository.delete(id);
+    return {message: `Categoría con el id ${id} eliminada.`}
   }
 }
