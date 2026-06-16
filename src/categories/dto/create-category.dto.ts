@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator"
+import { Food } from "src/foods/entities/food.entity"
 
 export class CreateCategoryDto {
     @IsString()
@@ -10,4 +11,6 @@ export class CreateCategoryDto {
     @IsBoolean()
     @IsNotEmpty()
     active!: boolean
+    @IsNotEmpty()
+    foods!: Food[]
 }
