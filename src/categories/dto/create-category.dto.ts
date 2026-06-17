@@ -11,6 +11,6 @@ export class CreateCategoryDto {
     @IsBoolean()
     @IsNotEmpty()
     active!: boolean
-    @IsNotEmpty()
-    foods!: Food[]
+    //@IsNotEmpty()
+    //foods!: Food[]
 }
