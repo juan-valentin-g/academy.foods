@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth/auth.module';
 import { AuthService } from './auth/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { CategoriesModule } from './categories/categories.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { CategoriesModule } from './categories/categories.module';
     FoodsModule,
     UsersModule,
     AuthModule,
-    CategoriesModule],
+    CategoriesModule,
+    UploadModule],
   controllers: [AppController,],
   providers: [AppService],
 })
